@@ -1,0 +1,22 @@
+{
+  "name": "websocket-game",
+  "version": "0.0.1",
+  "description": "One user creates the server and the other ones connect to it, once everything is ready each user's display act like a extended display and everyone can play the game in its display and see how its acts are reflected at the other displays",
+  "scripts": {
+    "start": "node ./src/server/server.js",
+    "dev": "webpack && npm start"
+  },
+  "author": "AS",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-loader": "^7.1.4",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "serialport": "^6.2.0",
+    "socket.io": "^2.1.0",
+    "webpack-dev-server": "^3.1.3"
+  }
+}
