@@ -41,10 +41,13 @@ class Socket {
         });
       });
 
+      socket.on('touchdown', ()=> console.log("TOCHEASTEEE!"));
+
       //Handle when a user disconnects
       socket.on('disconnect', () => {
           this.players.map( (player, index) => {
             if(player.sessionId === socket.id) {
+              console.log('user ',player.id,' disconnected');
               this.playerId -= 1;
               this.players.splice(index, 1);
             }
@@ -68,18 +71,20 @@ class Socket {
       if(player.currentDisplay === 1 && side === 'left') {
         player.currentDisplay = 2;
         player.position.x = player.display.width;
-        console.log('CHANGE SIDEE ',player);
       } else if(player.currentDisplay === 1 && side === 'right') {
         player.currentDisplay = 2;
-        player.position.x = player.position.x - player.display.width;
-        console.log('RIGHT !! ',player);
-      } else if(player.currentDisplay >= 2 && side === 'left') {
-        player.currentDisplay = player.currentDisplay -1;
+        player.position.x = 0;
+      } else if(player.currentDisplay > 1 && side === 'left') {
+        player.currentDisplay -= -1;
         player.position.x = player.display.width;
-      } else if((player.currentDisplay >= 2 && this.players[this.players.length-1].id === player.id) && side === 'right') {
-        console.log("EEEEEEEEEEEEEEEEE");
-        player.currentDisplay = 1;
-        player.position.x = player.position.x - player.display.width;
+      } else if(player.currentDisplay > 1 && side === 'right') {
+        if(this.players[this.players.length-1].id === player.currentDisplay) {
+          player.currentDisplay = 1;
+          player.position.x = 0;
+        } else {
+          player.currentDisplay += 1;
+          player.position.x = 0;
+        }
       }
     } else{
       if(side === 'left') {

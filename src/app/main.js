@@ -20,6 +20,10 @@ class Main {
   }
 
   loadListenner() {
+    document.addEventListener('touchdown', e => {
+      this.io.emit('touchdown', {width: window.innerWidth, height: window.innerHeight});
+    //  this.mousemoveHandler(e);
+    });
     document.addEventListener('mousemove', e => {
     //  this.mousemoveHandler(e);
     });
