@@ -69,13 +69,14 @@ class Socket {
   changeCurrentDisplay(player, side) {
     if(this.players.length > 1) {
       if(player.currentDisplay === 1 && side === 'left') {
-        player.currentDisplay = 2;
+        //go to the last display
+        player.currentDisplay = this.players[this.players.length-1].id;
         player.position.x = player.display.width;
       } else if(player.currentDisplay === 1 && side === 'right') {
-        player.currentDisplay = 2;
+        player.currentDisplay += 1;
         player.position.x = 0;
       } else if(player.currentDisplay > 1 && side === 'left') {
-        player.currentDisplay -= -1;
+        player.currentDisplay -= 1;
         player.position.x = player.display.width;
       } else if(player.currentDisplay > 1 && side === 'right') {
         if(this.players[this.players.length-1].id === player.currentDisplay) {
