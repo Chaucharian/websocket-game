@@ -20,10 +20,18 @@ class Main {
   }
 
   loadListenner() {
-    document.addEventListener('touchdown', e => {
-      this.io.emit('touchdown', {width: window.innerWidth, height: window.innerHeight});
-    //  this.mousemoveHandler(e);
+    document.addEventListener('touchstart', e => {
+      if(e.touches[0].clientX > window.innerWidth/2) {
+        this.animation.touchDown('right');
+      } else{
+        this.animation.touchDown('left');
+      }
     });
+
+    document.addEventListener('touchend', e => {
+      this.animation.touchUp();
+    });
+
     document.addEventListener('mousemove', e => {
     //  this.mousemoveHandler(e);
     });

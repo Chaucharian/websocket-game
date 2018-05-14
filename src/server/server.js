@@ -12,7 +12,7 @@ app.use(express.static(path.resolve(__dirname, '../public')) );
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
-
-http.listen(3000, () => {
+//Ip needs to be thus(0.0.0.0) to run on local network
+http.listen(3000, '0.0.0.0', () => {
   console.log('listening on: 3000!');
 });

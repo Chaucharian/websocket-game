@@ -46,10 +46,12 @@ export default class Animation {
     }
 
     //Iterate every object's position and validate if some reach the display limit
-    this.players.forEach( player => {
-      //Only paint the players that are at this display
-      if(player.currentDisplay === this.id) p5.ellipse(player.position.x, player.position.y, this.circleRadius, this.circleRadius);
-    });
+    if(Array.isArray(this.players)) {
+      this.players.forEach( player => {
+        //Only paint the players that are at this display
+        if(player.currentDisplay === this.id) p5.ellipse(player.position.x, player.position.y, this.circleRadius, this.circleRadius);
+      });
+    }
 
     if(this.left) {
       this.socketCallback({name: 'moveLeft'});
@@ -99,4 +101,18 @@ export default class Animation {
         this.right = false;
     }
   }
+
+  touchDown(side) {
+    if(side === 'left') {
+      this.left = true;
+    } else if(side === 'right') {
+      this.right = true;
+    }
+  }
+
+  touchUp() {
+      this.left = false;
+      this.right = false;
+  }
+
 }

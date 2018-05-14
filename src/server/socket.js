@@ -33,15 +33,15 @@ class Socket {
         this.players.forEach( player => {
           if(data.id === player.id) {
             player.position.x += this.velocityMovement;
-            if(player.position.x >= data.display.width + 50) this.changeCurrentDisplay(player, 'right');
+            //by this way "this.players[player.currentDisplay-1].display.width" we can determinate at wich display we are and calculate 
+            //the new position
+            if(player.position.x >= this.players[player.currentDisplay-1].display.width + 50) this.changeCurrentDisplay(player, 'right');
 
             console.log('player ',player);
             this.io.sockets.connected[this.players[player.currentDisplay-1].sessionId].emit('getPlayers', this.players);
           }
         });
       });
-
-      socket.on('touchdown', ()=> console.log("TOCHEASTEEE!"));
 
       //Handle when a user disconnects
       socket.on('disconnect', () => {
@@ -71,13 +71,13 @@ class Socket {
       if(player.currentDisplay === 1 && side === 'left') {
         //go to the last display
         player.currentDisplay = this.players[this.players.length-1].id;
-        player.position.x = player.display.width;
+        player.position.x = this.players[player.currentDisplay-1].display.width;
       } else if(player.currentDisplay === 1 && side === 'right') {
         player.currentDisplay += 1;
         player.position.x = 0;
       } else if(player.currentDisplay > 1 && side === 'left') {
         player.currentDisplay -= 1;
-        player.position.x = player.display.width;
+        player.position.x = this.players[player.currentDisplay-1].display.width;
       } else if(player.currentDisplay > 1 && side === 'right') {
         if(this.players[this.players.length-1].id === player.currentDisplay) {
           player.currentDisplay = 1;
