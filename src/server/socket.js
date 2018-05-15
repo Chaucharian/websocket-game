@@ -1,3 +1,5 @@
+//To have in mind when a user connected the server response with a currentDisplay that is equals to player's id
+//cause display == player.id
 class Socket {
 
   constructor(io) {
@@ -33,9 +35,7 @@ class Socket {
         this.players.forEach( player => {
           if(data.id === player.id) {
             player.position.x += this.velocityMovement;
-            //by this way "this.players[player.currentDisplay-1].display.width" we can determinate at wich display we are and calculate 
-            //the new position
-            if(player.position.x >= this.players[player.currentDisplay-1].display.width + 50) this.changeCurrentDisplay(player, 'right');
+            if(player.position.x >= this.getWidthOfCurrentDisplay(player.currentDisplay) + 50) this.changeCurrentDisplay(player, 'right');
 
             console.log('player ',player);
             this.io.sockets.connected[this.players[player.currentDisplay-1].sessionId].emit('getPlayers', this.players);
@@ -63,23 +63,23 @@ class Socket {
     this.playerId += 1;
     this.players.push({sessionId: socket.id, id: this.playerId, display: {width:  display.width, height:  display.height},
       position: {x: display.width/2, y: display.height/2}, currentDisplay: this.playerId });
-    this.io.sockets.connected[this.players[this.players.length-1].sessionId].emit('init', this.players[this.players.length-1]);
+    this.io.sockets.connected[this.getLastPlayer().sessionId].emit('init', this.getLastPlayer());
   }
 
   changeCurrentDisplay(player, side) {
     if(this.players.length > 1) {
       if(player.currentDisplay === 1 && side === 'left') {
         //go to the last display
-        player.currentDisplay = this.players[this.players.length-1].id;
-        player.position.x = this.players[player.currentDisplay-1].display.width;
+        player.currentDisplay = this.getLastPlayer().id;
+        player.position.x = this.getWidthOfCurrentDisplay(player.currentDisplay);
       } else if(player.currentDisplay === 1 && side === 'right') {
         player.currentDisplay += 1;
         player.position.x = 0;
       } else if(player.currentDisplay > 1 && side === 'left') {
         player.currentDisplay -= 1;
-        player.position.x = this.players[player.currentDisplay-1].display.width;
+        player.position.x = this.getWidthOfCurrentDisplay(player.currentDisplay);
       } else if(player.currentDisplay > 1 && side === 'right') {
-        if(this.players[this.players.length-1].id === player.currentDisplay) {
+        if(this.getLastPlayer().id === player.currentDisplay) {
           player.currentDisplay = 1;
           player.position.x = 0;
         } else {
@@ -95,6 +95,16 @@ class Socket {
         player.position.x = 0;
       }
     }
+  }
+
+  getLastPlayer() {
+    return this.players[this.players.length-1];
+  }
+
+  getWidthOfCurrentDisplay(currentDisplay) {
+    //by this way "this.players[player.currentDisplay-1].display.width" we can determinate at wich display we are and calculate
+    //the new position
+    return this.players[currentDisplay-1].display.width;
   }
 }
 
